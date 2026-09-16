@@ -1,8 +1,8 @@
 # Render 클라우드 웹 호스팅 24시간 구동 테스트
 
 ## 사용 툴
-#GitHub
-*Render*
+**GitHub**
+**Render**
 **uptimerobot**
 
 ## 소스 버전관리
