@@ -1,16 +1,15 @@
-import os
+import gradio as gr
 
-from flask import Flask
+# 1. 실행할 파이썬 함수 정의
+def greet(name):
+    return f"안녕하세요, {name}님!"
 
-app = Flask(__name__)
+# 2. 인터페이스 생성 (함수, 입력 형태, 출력 형태 지정)
+demo = gr.Interface(
+    fn=greet, 
+    inputs="text", 
+    outputs="text"
+)
 
-
-@app.route('/')
-def home():
-    return "24시간 웹 서비스가 작동 중입니다!", 200
-
-
-if __name__ == '__main__':
-    # 환경 변수 PORT가 있으면 그 값을, 없으면 5000번 포트를 사용
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+# 3. 웹 서버 실행
+demo.launch()
