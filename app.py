@@ -12,8 +12,8 @@ NeaT 공공급식 입찰공고 수집 (웹 버전 / Gradio).
     자동으로 쓰고 결과표 비고에 "여러 건 중 첫 건 사용"이라고 남긴다.
 
 [실행]
-    python 이주희_공공급식조달자동화_WEB.py
-    -> http://127.0.0.1:7860
+    python app.py      -> http://127.0.0.1:7860
+    (Render 에서는 PORT 환경변수로 넘어온 포트를 쓴다)
 
 [남에게 잠깐 보여줄 때]
     아래 SHARE 를 True 로 바꾸면 gradio가 임시 공개주소(*.gradio.live)를 만들어준다.
@@ -32,7 +32,7 @@ import gradio as gr
 
 # 수집 로직은 옆에 있는 콘솔 버전 파일을 그대로 불러다 쓴다.
 _BASE_DIR = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
-CORE_MODULE_PATH = os.path.join(_BASE_DIR, "이주희_공공급식조달자동화.py")
+CORE_MODULE_PATH = os.path.join(_BASE_DIR, "neat_core.py")   # 배포 저장소에서는 ASCII 이름을 쓴다
 _spec = importlib.util.spec_from_file_location("neat_collect_core", CORE_MODULE_PATH)
 core = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(core)
@@ -42,7 +42,8 @@ from playwright.sync_api import sync_playwright
 
 # 공개 임시주소(*.gradio.live)를 만들지 여부
 SHARE = False
-SERVER_PORT = 7860
+# Render 같은 호스팅은 포트를 PORT 환경변수로 지정해준다. 없으면 7860.
+SERVER_PORT = int(os.environ.get("PORT", 7860))
 
 TABLE_HEADERS = ["대상월", "공고번호", "기초가격", "낙찰예정가", "투찰률", "공고건명 / 비고"]
 
@@ -382,9 +383,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# if __name__ == '__main__':
-#     # Render가 지정하는 환경변수 PORT 연결 필수
-#     port = int(os.environ.get('PORT', 7860))
-#     demo.launch(server_name="0.0.0.0", server_port=port)
