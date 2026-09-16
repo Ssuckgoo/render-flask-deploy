@@ -11,5 +11,6 @@ demo = gr.Interface(
 )
 
 if __name__ == '__main__':
+    # Render가 지정하는 환경변수 PORT 연결 필수
     port = int(os.environ.get('PORT', 7860))
     demo.launch(server_name="0.0.0.0", server_port=port)
