@@ -1,0 +1,21 @@
+# Render 블루프린트 (도커 없이 파이썬 환경으로 배포).
+# 대시보드에서 New > Blueprint 로 이 저장소를 연결하면 이 설정대로 만들어진다.
+services:
+  - type: web
+    name: neat-bid-collector
+    runtime: python
+    plan: free               # 무료 플랜: 메모리 512MB, 15분 동안 접속이 없으면 잠든다
+    region: singapore        # 한국에서 가장 가까운 지역
+    # 크로미움은 빌드할 때 미리 받아둔다.
+    buildCommand: pip install -r requirements.txt && playwright install chromium
+    startCommand: python app.py
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.10"
+      # 0 = 크로미움을 파이썬 패키지 폴더 안에 받는다.
+      # 기본 위치(홈 폴더 캐시)는 빌드가 끝나면 지워져서 실행할 때 크로미움을 못 찾는다.
+      - key: PLAYWRIGHT_BROWSERS_PATH
+        value: "0"
+      - key: PYTHONUNBUFFERED
+        value: "1"
